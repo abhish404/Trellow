@@ -4,7 +4,10 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
+    "preDeployCommand": ["npm run db:push"],
     "startCommand": "NODE_ENV=production npm start",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   },
