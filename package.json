@@ -10,5 +10,8 @@
     "db:push": "cd server && npx prisma db push",
     "db:seed": "cd server && node prisma/seed.js",
     "postinstall": "cd client && npm install && cd ../server && npm install"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
