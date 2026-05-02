@@ -27,7 +27,7 @@ export default function Dashboard() {
     <div className="dashboard">
       <div className="page-header">
         <h1>Dashboard</h1>
-        <p className="page-subtitle">Overview of all your projects and tasks</p>
+        <p className="page-subtitle">Overview</p>
       </div>
 
       <div className="stats-grid">

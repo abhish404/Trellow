@@ -1,12 +1,12 @@
 .projects-page {
-  max-width: 1200px;
+  max-width: 960px;
 }
 
 .page-header {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 48px;
   gap: 16px;
   flex-wrap: wrap;
 }
@@ -14,35 +14,33 @@
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: var(--accent-gradient);
-  color: white;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--text-primary);
+  color: var(--bg-primary);
   font-weight: 600;
   font-size: 13px;
   border-radius: var(--radius-md);
-  transition: all var(--transition);
-  box-shadow: var(--shadow-glow);
+  transition: opacity var(--transition);
   white-space: nowrap;
 }
 
 .btn-primary svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 0 32px rgba(99, 102, 241, 0.3);
+  opacity: 0.8;
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .btn-ghost {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: transparent;
   color: var(--text-secondary);
   font-weight: 500;
@@ -53,47 +51,48 @@
 }
 
 .btn-ghost:hover {
-  background: var(--bg-card-hover);
+  border-color: var(--text-primary);
   color: var(--text-primary);
 }
 
 .btn-danger {
-  padding: 10px 20px;
-  background: var(--danger-bg);
-  color: var(--danger);
+  padding: 8px 16px;
+  background: transparent;
+  color: #D4564E;
   font-weight: 500;
   font-size: 13px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(212, 86, 78, 0.25);
   transition: all var(--transition);
 }
 
 .btn-danger:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(212, 86, 78, 0.06);
+  border-color: rgba(212, 86, 78, 0.4);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 200;
   padding: 20px;
-  animation: fadeIn 0.15s ease;
+  animation: fadeIn 0.12s ease;
 }
 
 .modal {
   width: 100%;
-  max-width: 480px;
-  background: var(--bg-secondary);
+  max-width: 420px;
+  background: var(--bg-primary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow: var(--shadow-lg);
-  animation: slideUp 0.2s ease;
+  animation: slideUp 0.12s ease;
 }
 
 @keyframes fadeIn {
@@ -102,14 +101,16 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal h2 {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 24px;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .modal-form {
@@ -121,7 +122,7 @@
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
   margin-top: 8px;
 }
 
@@ -135,10 +136,10 @@
 }
 
 .empty-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-lg);
-  background: var(--bg-card);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -146,12 +147,13 @@
 }
 
 .empty-icon svg {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
+  opacity: 0.4;
 }
 
 .empty-state h3 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 4px;
@@ -163,53 +165,49 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
 
 .project-card {
-  background: var(--bg-card);
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 22px;
+  padding: 24px;
   text-decoration: none;
   color: inherit;
-  transition: all var(--transition);
+  transition: border-color var(--transition);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(12px);
 }
 
 .project-card:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background: var(--bg-tertiary);
 }
 
 .project-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .project-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  background: var(--accent-gradient);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   color: white;
 }
 
 .project-delete {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
@@ -221,8 +219,8 @@
 }
 
 .project-delete svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .project-card:hover .project-delete {
@@ -230,19 +228,19 @@
 }
 
 .project-delete:hover {
-  color: var(--danger);
-  background: var(--danger-bg);
+  color: #D4564E;
 }
 
 .project-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  color: var(--text-primary);
 }
 
 .project-desc {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   margin-bottom: 16px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -253,9 +251,11 @@
 .project-meta {
   display: flex;
   gap: 16px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   margin-top: auto;
   padding-top: 14px;
   border-top: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }

@@ -30,10 +30,6 @@ export default function Signup() {
 
   return (
     <div className="auth-page">
-      <div className="auth-bg">
-        <div className="auth-orb auth-orb-1" />
-        <div className="auth-orb auth-orb-2" />
-      </div>
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-brand">

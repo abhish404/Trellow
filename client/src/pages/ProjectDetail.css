@@ -1,5 +1,21 @@
 .project-detail {
-  max-width: 1400px;
+  max-width: 1200px;
+}
+
+.project-detail .page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.project-detail .page-header h1 {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
 }
 
 .detail-breadcrumb {
@@ -7,8 +23,10 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 4px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .detail-breadcrumb a {
@@ -18,196 +36,200 @@
 }
 
 .detail-breadcrumb a:hover {
-  color: var(--accent-light);
+  color: var(--text-primary);
 }
 
 .header-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .header-actions .btn-ghost {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .header-actions .btn-ghost svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .members-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 6px;
+  margin-bottom: 32px;
 }
 
 .member-chip {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 6px;
-  background: var(--bg-card);
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: 100px;
-  font-size: 13px;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .member-avatar {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 600;
   color: white;
 }
 
 .role-badge {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
 }
 
 .role-admin {
-  background: var(--accent-glow);
-  color: var(--accent-light);
+  background: var(--accent-bg);
+  color: var(--text-secondary);
 }
 
 .role-member {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-tertiary);
   color: var(--text-muted);
 }
 
 .member-remove {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: transparent;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  transition: all var(--transition);
+  transition: color var(--transition);
 }
 
 .member-remove:hover {
-  background: var(--danger-bg);
-  color: var(--danger);
+  color: var(--text-primary);
 }
 
 .task-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 24px;
+  margin-bottom: 48px;
 }
 
 .task-column {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   min-height: 300px;
 }
 
 .column-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
 
 .column-dot {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+  background: var(--text-muted);
 }
 
-.status-todo { background: var(--info); }
-.status-in_progress { background: var(--warning); }
-.status-done { background: var(--success); }
+.status-todo { background: #CCCCCC; }
+.status-in_progress { background: #888888; }
+.status-done { background: #333333; }
 
 .column-header h3 {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
   flex: 1;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .column-count {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 2px 8px;
-  border-radius: 10px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
 }
 
 .column-tasks {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .column-empty {
   text-align: center;
   padding: 30px;
-  color: var(--text-muted);
+  color: #DDDDDD;
   font-size: 13px;
 }
 
 .task-card {
-  background: var(--bg-tertiary);
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 14px;
-  transition: all var(--transition);
+  transition: border-color var(--transition);
 }
 
 .task-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: var(--shadow-sm);
+  border-color: #CCCCCC;
 }
 
 .task-card.task-overdue {
-  border-left: 3px solid var(--danger);
+  border-left: 2px solid var(--text-primary);
 }
 
 .task-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .priority-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
 }
 
-.priority-low { background: var(--text-muted); }
-.priority-med { background: var(--info); }
-.priority-high { background: var(--warning); }
-.priority-urgent { background: var(--danger); }
+.priority-low { background: #DDDDDD; }
+.priority-med { background: #AAAAAA; }
+.priority-high { background: #666666; }
+.priority-urgent { background: #000000; }
 
 .task-card-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   opacity: 0;
   transition: opacity var(--transition);
 }
@@ -217,40 +239,38 @@
 }
 
 .status-select {
-  padding: 3px 6px;
-  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 10px;
   cursor: pointer;
 }
 
 .icon-btn {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition);
+  transition: color var(--transition);
 }
 
 .icon-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
 
 .icon-btn:hover {
-  background: var(--bg-card-hover);
   color: var(--text-primary);
 }
 
 .icon-btn-danger:hover {
-  background: var(--danger-bg);
-  color: var(--danger);
+  color: #D4564E;
 }
 
 .task-title {
@@ -258,12 +278,13 @@
   font-weight: 600;
   margin-bottom: 4px;
   line-height: 1.3;
+  color: var(--text-primary);
 }
 
 .task-desc {
   font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -284,19 +305,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .mini-avatar {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   color: white;
 }
@@ -307,7 +328,7 @@
 }
 
 .due-overdue {
-  color: var(--danger);
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -318,7 +339,7 @@
 }
 
 .danger-zone {
-  padding-top: 24px;
+  padding-top: 32px;
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: flex-end;
@@ -327,5 +348,53 @@
 @media (max-width: 900px) {
   .task-board {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .members-bar {
+    gap: 4px;
+  }
+
+  .member-chip {
+    font-size: 11px;
+    padding: 3px 8px 3px 3px;
+  }
+
+  .member-avatar {
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .task-card {
+    padding: 12px;
+  }
+
+  .task-card-actions {
+    opacity: 1;
   }
 }
