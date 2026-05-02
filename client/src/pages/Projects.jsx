@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProjects, createProject, deleteProject } from '../api/projects';
+import { useAuth } from '../context/AuthContext';
 import './Projects.css';
 
 export default function Projects() {
@@ -10,6 +11,7 @@ export default function Projects() {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
 
   const load = () => {
     getProjects()
@@ -37,6 +39,8 @@ export default function Projects() {
     await deleteProject(id);
     load();
   };
+
+  const getMyRole = (p) => p.members?.find(m => m.user.id === user?.id)?.role;
 
   if (loading) return <div className="page-loading">Loading...</div>;
 
@@ -102,6 +106,8 @@ export default function Projects() {
               <div className="project-meta">
                 <span>{p._count?.tasks || 0} tasks</span>
                 <span>{p.members?.length || 0} members</span>
+                {getMyRole(p) === 'ADMIN' && <span className="project-role-tag project-role-admin">Admin</span>}
+                {getMyRole(p) === 'MEMBER' && <span className="project-role-tag project-role-member">Member</span>}
               </div>
             </Link>
           ))}

@@ -113,6 +113,73 @@
   padding: 20px;
 }
 
+/* ── Overdue List ── */
+.overdue-section {
+  margin-bottom: 48px;
+}
+
+.overdue-list {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.overdue-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+
+.overdue-item:last-child {
+  border-bottom: none;
+}
+
+.overdue-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.overdue-item .priority-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.overdue-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overdue-task-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overdue-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.overdue-days {
+  font-size: 12px;
+  font-weight: 600;
+  color: #D4564E;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .bar-chart {
   display: flex;
   flex-direction: column;

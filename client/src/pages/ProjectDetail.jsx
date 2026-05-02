@@ -102,6 +102,7 @@ export default function ProjectDetail() {
   };
 
   const isOverdue = (t) => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'DONE';
+  const getMemberRole = (userId) => project?.members?.find(m => m.user.id === userId)?.role;
 
   if (loading) return <div className="page-loading">Loading...</div>;
   if (!project) return null;
@@ -184,17 +185,23 @@ export default function ProjectDetail() {
                     <h4 className="task-title">{t.title}</h4>
                     {t.description && <p className="task-desc">{t.description}</p>}
                     <div className="task-card-footer">
-                      {t.assignee && (
+                      {t.assignee ? (
                         <div className="task-assignee">
                           <div className="mini-avatar">{t.assignee.name[0].toUpperCase()}</div>
                           <span>{t.assignee.name}</span>
+                          {getMemberRole(t.assigneeId) === 'ADMIN' && <span className="admin-tag">Admin</span>}
+                          {getMemberRole(t.assigneeId) === 'MEMBER' && <span className="member-tag">Member</span>}
+                        </div>
+                      ) : (
+                        <div className="task-assignee">
+                          <span className="unassigned-tag">Unassigned</span>
                         </div>
                       )}
-                      {t.dueDate && (
-                        <span className={`task-due ${isOverdue(t) ? 'due-overdue' : ''}`}>
-                          {new Date(t.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                        </span>
-                      )}
+                      <span className={`task-due ${isOverdue(t) ? 'due-overdue' : ''}`}>
+                        {t.dueDate
+                          ? new Date(t.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                          : 'No date'}
+                      </span>
                     </div>
                   </div>
                 ))}

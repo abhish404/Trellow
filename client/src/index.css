@@ -41,6 +41,38 @@
   --transition: 0.12s ease;
 }
 
+[data-theme="dark"] {
+  --bg-primary: #111111;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1A1A1A;
+  --bg-card: #1A1A1A;
+  --bg-card-hover: #222222;
+
+  --border: #2A2A2A;
+  --border-focus: #555555;
+
+  --text-primary: #F0F0F0;
+  --text-secondary: #B0B0B0;
+  --text-muted: #777777;
+
+  --accent: #F0F0F0;
+  --accent-light: #F0F0F0;
+  --accent-bg: rgba(255, 255, 255, 0.06);
+
+  --success: #999999;
+  --success-bg: rgba(255, 255, 255, 0.06);
+  --warning: #888888;
+  --warning-bg: rgba(255, 255, 255, 0.06);
+  --danger: #F0F0F0;
+  --danger-bg: rgba(255, 255, 255, 0.06);
+  --info: #AAAAAA;
+  --info-bg: rgba(255, 255, 255, 0.06);
+
+  --shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {
@@ -77,6 +109,93 @@ button {
 
 input, select, textarea {
   font-family: inherit;
+  outline: none;
+  color-scheme: light;
+}
+
+/* ── Select dropdown ── */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px !important;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+select:hover {
+  border-color: #CCCCCC;
+}
+
+select:focus {
+  border-color: #AAAAAA;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Date input ── */
+input[type="date"] {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+input[type="date"]:hover {
+  border-color: #CCCCCC;
+}
+
+input[type="date"]:focus {
+  border-color: #AAAAAA;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.35;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: opacity 0.12s ease, background 0.12s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* ── Chromium date picker popup ── */
+::-webkit-datetime-edit {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-year-field {
+  padding: 1px 2px;
+  border-radius: 3px;
+}
+
+::-webkit-datetime-edit-day-field:focus,
+::-webkit-datetime-edit-month-field:focus,
+::-webkit-datetime-edit-year-field:focus {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-primary);
   outline: none;
 }
 

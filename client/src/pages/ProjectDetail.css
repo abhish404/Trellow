@@ -156,9 +156,17 @@
   background: var(--text-muted);
 }
 
-.status-todo { background: #CCCCCC; }
-.status-in_progress { background: #888888; }
-.status-done { background: #333333; }
+.status-todo {
+  background: #CCCCCC;
+}
+
+.status-in_progress {
+  background: #888888;
+}
+
+.status-done {
+  background: #333333;
+}
 
 .column-header h3 {
   font-size: 11px;
@@ -196,7 +204,7 @@
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: 18px;
   transition: border-color var(--transition);
 }
 
@@ -205,7 +213,7 @@
 }
 
 .task-card.task-overdue {
-  border-left: 2px solid var(--text-primary);
+  border-left: 2px solid #D4564E;
 }
 
 .task-card-top {
@@ -221,10 +229,21 @@
   border-radius: 50%;
 }
 
-.priority-low { background: #DDDDDD; }
-.priority-med { background: #AAAAAA; }
-.priority-high { background: #666666; }
-.priority-urgent { background: #000000; }
+.priority-low {
+  background: #DDDDDD;
+}
+
+.priority-med {
+  background: #AAAAAA;
+}
+
+.priority-high {
+  background: #666666;
+}
+
+.priority-urgent {
+  background: #000000;
+}
 
 .task-card-actions {
   display: flex;
@@ -239,13 +258,19 @@
 }
 
 .status-select {
-  padding: 2px 6px;
-  background: transparent;
+  padding: 4px 28px 4px 10px;
+  background: var(--bg-primary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 10px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
+}
+
+.status-select:hover {
+  border-color: #CCCCCC;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .icon-btn {
@@ -282,11 +307,12 @@
 }
 
 .task-desc {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 13px;
+  color: var(--text-secondary);
   margin-bottom: 8px;
+  line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -309,6 +335,39 @@
   color: var(--text-muted);
 }
 
+.admin-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #16A34A;
+  background: rgba(22, 163, 74, 0.08);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.member-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.unassigned-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #D97706;
+  background: rgba(217, 119, 6, 0.08);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
 .mini-avatar {
   width: 18px;
   height: 18px;
@@ -325,6 +384,7 @@
 .task-due {
   font-size: 11px;
   color: var(--text-muted);
+  margin-left: auto;
 }
 
 .due-overdue {

@@ -74,8 +74,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,13 +86,13 @@
 
 .modal {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   background: var(--bg-primary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-lg);
-  animation: slideUp 0.12s ease;
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.15s ease;
 }
 
 @keyframes fadeIn {
@@ -101,14 +101,14 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .modal h2 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 28px;
   color: var(--text-primary);
   letter-spacing: -0.5px;
 }
@@ -116,14 +116,49 @@
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+}
+
+/* Modal field overrides — boxed inputs instead of auth bottom-line */
+.modal .field input,
+.modal .field select,
+.modal .field textarea {
+  padding: 10px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: border-color var(--transition);
+}
+
+.modal .field input:focus,
+.modal .field select:focus,
+.modal .field textarea:focus {
+  border-color: var(--text-primary);
+  box-shadow: none;
+}
+
+.modal .field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.modal .field textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
 
 .empty-state {
@@ -250,6 +285,7 @@
 
 .project-meta {
   display: flex;
+  align-items: center;
   gap: 16px;
   font-size: 11px;
   color: var(--text-muted);
@@ -258,4 +294,22 @@
   border-top: 1px solid var(--border);
   text-transform: uppercase;
   letter-spacing: 0.3px;
+}
+
+.project-role-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+.project-role-admin {
+  color: #16A34A;
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.project-role-member {
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.04);
 }
