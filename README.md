@@ -1,141 +1,305 @@
-# Trellow — Team Task Manager
+# Jeera — Team Task Manager
 
-A full-stack collaborative task management app built with React, Express.js, Prisma, and PostgreSQL.
+A full-stack collaborative task management application built as a simplified Trello/Asana clone. Designed to demonstrate end-to-end product thinking, clean architecture, and production-ready engineering practices.
+
+> Live Demo: [https://trellow-production.up.railway.app/](https://trellow-production.up.railway.app/)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [API Design](#api-design)
+- [Authentication & Security](#authentication--security)
+- [Role-Based Access Control](#role-based-access-control)
+- [Database Design](#database-design)
+- [UI/UX Approach](#uiux-approach)
+- [Project Structure](#project-structure)
+- [Local Setup](#local-setup)
+- [Environment Variables](#environment-variables)
+- [Deployment](#deployment)
+- [Engineering Decisions](#engineering-decisions)
+- [License](#license)
+
+---
+
+## Overview
+
+Jeera is a multi-user project and task management tool where teams can collaborate, assign work, and track delivery. It is built as a monorepo with a React frontend and an Express.js REST API backend, backed by PostgreSQL.
+
+The application supports complete project lifecycle management — from creating a project and onboarding team members, to assigning tasks with priority levels, tracking status across a Kanban board, and reviewing team-wide progress on a central dashboard.
+
+---
 
 ## Features
 
-- **Authentication** — JWT-based signup/login with bcrypt password hashing
-- **Project Management** — Create projects, invite team members by email
-- **Task Management** — Create, assign, and track tasks with priorities and due dates
-- **Role-Based Access** — Admin (full control) and Member (view + update own tasks) roles
-- **Dashboard** — Stats overview with task breakdowns by status, priority, and assignee
-- **Task Board** — Three-column board (To Do, In Progress, Done) per project
+**Authentication**
+- Secure signup and login with hashed passwords
+- JWT-based stateless authentication
+- Protected routes on both client and server
+
+**Projects**
+- Create and manage projects
+- Invite team members and assign roles (Admin / Member)
+- View all projects the authenticated user belongs to
+
+**Tasks**
+- Create tasks with title, description, priority, due date, and assignee
+- Kanban board view with three columns: To Do, In Progress, Done
+- Role-restricted actions — only Admins can create or delete tasks; Members can update status on tasks assigned to them
+- Filterable task list per project
+
+**Dashboard**
+- Aggregate stats across all projects (total tasks, by status, overdue count)
+- Per-project stats view
+- Overdue task highlighting
+
+**General**
+- Fully responsive layout with a collapsible sidebar
+- Global error handling with structured API error responses
+- Input validation on both client and server using shared Zod schemas
+
+---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 19, Vite, React Router, Axios |
-| Backend | Express.js 5, Prisma ORM, Zod validation |
-| Database | PostgreSQL |
-| Auth | JWT + bcryptjs |
-| Deployment | Railway |
+| Layer      | Technology                   | Rationale                                                          |
+|------------|------------------------------|--------------------------------------------------------------------|
+| Frontend   | React 18 + Vite              | Fast dev experience, component-based UI, modern bundling           |
+| Styling    | Vanilla CSS (design tokens)  | Full control over the design system, no framework lock-in          |
+| State      | React Context + useReducer   | Lightweight global state without Redux overhead                    |
+| Backend    | Express.js (Node 20)         | Minimal, flexible, well-understood REST framework                  |
+| ORM        | Prisma                       | Type-safe queries, auto-migrations, clean schema definition        |
+| Database   | PostgreSQL (Neon.tech)       | Relational model fits users → projects → tasks naturally           |
+| Auth       | JWT + bcryptjs               | Stateless, scalable auth with industry-standard password hashing   |
+| Validation | Zod                          | Schema validation shared across API layers                         |
+| Deployment | Railway                      | Single-service deployment with environment variable management     |
+
+---
+
+## Architecture
+
+The application is structured as a monorepo with two packages — `client` and `server`. In production, the React app is compiled into static files and served directly by Express, resulting in a single deployable service with no CORS complexity.
+
+```
+Browser → Express Server (Railway) → PostgreSQL (Neon.tech)
+               ↑
+        Serves /client/dist (React build)
+        Handles /api/* routes
+```
+
+All API routes are prefixed with `/api`. Any non-API path falls through to `index.html`, supporting client-side routing.
+
+---
+
+## API Design
+
+The REST API is organized around three core resources — `auth`, `projects`, `tasks` — and a `dashboard` module for aggregated reads.
+
+**Auth** — `/api/auth`
+
+| Method | Endpoint | Description         | Auth Required |
+|--------|----------|---------------------|---------------|
+| POST   | /signup  | Register a new user | No            |
+| POST   | /login   | Login, returns JWT  | No            |
+| GET    | /me      | Get current user    | Yes           |
+
+**Projects** — `/api/projects`
+
+| Method | Endpoint                     | Description       | Role Required |
+|--------|------------------------------|-------------------|---------------|
+| GET    | /                            | List user's projects | Member+    |
+| POST   | /                            | Create project    | —             |
+| GET    | /:projectId                  | Project details   | Member+       |
+| PUT    | /:projectId                  | Update project    | Admin         |
+| DELETE | /:projectId                  | Delete project    | Admin         |
+| POST   | /:projectId/members          | Add member        | Admin         |
+| DELETE | /:projectId/members/:userId  | Remove member     | Admin         |
+
+**Tasks** — `/api/projects/:projectId/tasks`
+
+| Method | Endpoint          | Description              | Role Required    |
+|--------|-------------------|--------------------------|------------------|
+| GET    | /                 | List tasks (filterable)  | Member+          |
+| POST   | /                 | Create task              | Admin            |
+| GET    | /:taskId          | Task details             | Member+          |
+| PUT    | /:taskId          | Full update              | Admin            |
+| PATCH  | /:taskId/status   | Update status only       | Assignee / Admin |
+| DELETE | /:taskId          | Delete task              | Admin            |
+
+**Dashboard** — `/api/dashboard`
+
+| Method | Endpoint          | Description                   |
+|--------|-------------------|-------------------------------|
+| GET    | /stats            | Aggregate stats, all projects |
+| GET    | /stats/:projectId | Per-project stats             |
+
+---
+
+## Authentication & Security
+
+- Passwords are hashed with `bcryptjs` before storage — plaintext is never persisted
+- JWTs are signed with a server-side secret and carry a 24-hour expiry
+- All protected routes require an `Authorization: Bearer <token>` header
+- A dedicated `auth` middleware verifies and decodes the token before the request reaches any controller
+- All request bodies are validated against Zod schemas at the API boundary — malformed or missing fields are rejected before reaching business logic
+
+---
+
+## Role-Based Access Control
+
+Every project has members with one of two roles: `ADMIN` or `MEMBER`. Access is enforced at the middleware level, not inside controllers.
+
+- **ADMIN** — full CRUD on the project, its members, and all tasks
+- **MEMBER** — read access to the project and tasks; can only update the status of tasks assigned to them
+
+The RBAC middleware queries the `ProjectMember` table on each request to confirm the authenticated user's role before allowing the operation to proceed. Role checks are not duplicated in business logic.
+
+---
+
+## Database Design
+
+PostgreSQL is hosted on [Neon.tech](https://neon.tech) and managed via Prisma migrations. The schema is built around four models:
+
+- **User** — stores credentials and profile; identified by UUID
+- **Project** — a workspace with name and description
+- **ProjectMember** — junction table linking users to projects with a role (`ADMIN` | `MEMBER`)
+- **Task** — belongs to a project; has status (`TODO` | `IN_PROGRESS` | `DONE`), priority (`LOW` | `MEDIUM` | `HIGH` | `URGENT`), due date, and separate `creatorId` and `assigneeId` foreign keys
+
+Key decisions:
+- UUIDs as primary keys to avoid enumeration attacks and improve portability
+- Enums enforced at the database level for data integrity
+- Separate `creatorId` and `assigneeId` on tasks — supports audit trail and enables fine-grained RBAC
+
+---
+
+## UI/UX Approach
+
+The interface uses a flat, minimalist, card-based dashboard layout. All components are custom-built — no third-party UI library is used.
+
+- A CSS design token system handles color, spacing, and typography across the entire app
+- Inter is used for body text; JetBrains Mono for IDs and code-like elements
+- Fully responsive with a collapsible sidebar on smaller screens
+- Smooth transitions on route changes and modal open/close
+
+---
 
 ## Project Structure
 
 ```
-trellow/
-├── client/          React frontend (Vite)
+jeera/
+├── client/                     # React frontend (Vite)
 │   └── src/
-│       ├── api/     API service modules
-│       ├── components/  Layout, ProtectedRoute
-│       ├── context/     AuthContext
-│       └── pages/       Login, Signup, Dashboard, Projects, ProjectDetail
-├── server/          Express backend
-│   ├── prisma/      Schema + seed
+│       ├── api/                # Axios instance + per-resource service modules
+│       ├── components/         # Shared UI components (Button, Modal, Badge, Card, etc.)
+│       ├── context/            # AuthContext — global auth state
+│       ├── hooks/              # Custom hooks (useAuth, etc.)
+│       ├── pages/              # Route-level views (Login, Dashboard, ProjectDetail, etc.)
+│       └── utils/              # Date formatting and other helpers
+│
+├── server/                     # Express backend
+│   ├── prisma/                 # schema.prisma + migration history
 │   └── src/
-│       ├── middleware/  auth, rbac, error
-│       └── routes/      auth, projects, tasks, dashboard
-└── package.json     Root scripts for deployment
+│       ├── config/             # Environment variable loader
+│       ├── middleware/         # auth, rbac, validate, errorHandler
+│       ├── modules/            # Feature modules — each has routes, controller, service, schema
+│       │   ├── auth/
+│       │   ├── projects/
+│       │   ├── tasks/
+│       │   └── dashboard/
+│       └── utils/              # ApiError class and shared utilities
+│
+├── railway.json                # Railway deployment config
+└── README.md
 ```
+
+The backend follows a **modular layered pattern** — each feature is self-contained with its own routes, controller, service, and Zod schema. Controllers handle HTTP request/response concerns only. Business logic lives in service files. Prisma queries are isolated to the service layer.
+
+---
 
 ## Local Setup
 
-### Prerequisites
-
-- Node.js 20+
-- PostgreSQL database (local or cloud like [Neon](https://neon.tech), [Supabase](https://supabase.com))
-
-### 1. Clone & Install
+**Prerequisites:** Node.js 20+, npm, PostgreSQL (local instance or free [Neon.tech](https://neon.tech) database)
 
 ```bash
-git clone <your-repo-url>
-cd trellow
+# 1. Clone the repository
+git clone https://github.com/your-username/jeera.git
+cd jeera
 
-# Install server dependencies
-cd server
-npm install
+# 2. Install backend dependencies
+cd server && npm install
 
-# Install client dependencies
-cd ../client
-npm install
+# 3. Install frontend dependencies
+cd ../client && npm install
+
+# 4. Configure environment variables
+cd ../server
+cp .env.example .env
+# Edit .env and fill in the required values (see below)
+
+# 5. Run database migrations
+npx prisma migrate dev
+
+# 6. Start both dev servers (in separate terminals)
+# Terminal 1 — backend
+cd server && npm run dev
+
+# Terminal 2 — frontend
+cd client && npm run dev
 ```
 
-### 2. Configure Environment
+The Vite dev server proxies `/api` requests to the Express backend, so no CORS configuration is needed during development.
 
-```bash
-# In server/, create .env from the template
-cp server/.env.example server/.env
-# Edit server/.env and set your DATABASE_URL
-```
+---
 
-### 3. Set Up Database
+## Environment Variables
 
-```bash
-cd server
-npx prisma migrate dev --name init
-npm run db:seed  # Optional: load demo data
-```
+| Variable       | Description                                                        |
+|----------------|--------------------------------------------------------------------|
+| `DATABASE_URL` | PostgreSQL connection string (Neon.tech or local)                  |
+| `JWT_SECRET`   | Secret used to sign and verify JWTs — use a long random string     |
+| `NODE_ENV`     | `development` or `production`                                      |
+| `PORT`         | Port for Express (Railway injects this automatically in production)|
+| `VITE_API_URL` | API base URL — set to `/api` when frontend and backend share origin|
 
-### 4. Run Development Servers
+---
 
-```bash
-# Terminal 1 — Backend (port 3000)
-cd server
-npm run dev
+## Deployment
 
-# Terminal 2 — Frontend (port 5173, proxies /api to backend)
-cd client
-npm run dev
-```
+Deployed on **Railway** as a single service. The build process compiles the React app and Express serves it alongside the API from the same origin.
 
-Open http://localhost:5173
+**Build and serve flow:**
+1. `npm run build` inside `/client` generates a static bundle in `/client/dist`
+2. Express serves the bundle via `express.static('client/dist')`
+3. A catch-all route returns `index.html` for all non-API paths, enabling client-side routing
+4. All `/api/*` requests are routed to Express controllers as normal
+5. PostgreSQL is hosted on Neon.tech and connected via `DATABASE_URL`
 
-### Demo Credentials (after seeding)
+This single-service setup eliminates the need for a separate static hosting service and avoids cross-origin configuration entirely.
 
-| Email | Password |
-|-------|----------|
-| alice@trellow.com | password123 |
-| bob@trellow.com | password123 |
-| carol@trellow.com | password123 |
+---
 
-## API Endpoints
+## Engineering Decisions
 
-### Auth
-- `POST /api/auth/signup` — Register
-- `POST /api/auth/login` — Login
-- `GET /api/auth/me` — Current user
+**PostgreSQL over MongoDB**
+The data model is inherently relational — users belong to projects through a membership table, and tasks reference both. SQL joins and foreign key constraints handle this more cleanly and safely than a document model would.
 
-### Projects
-- `GET /api/projects` — List user's projects
-- `POST /api/projects` — Create project
-- `GET /api/projects/:id` — Project details
-- `PUT /api/projects/:id` — Update project (Admin)
-- `DELETE /api/projects/:id` — Delete project (Admin)
-- `POST /api/projects/:id/members` — Add member (Admin)
-- `DELETE /api/projects/:id/members/:userId` — Remove member (Admin)
+**Single Railway service**
+Serving the React build from Express avoids managing two deployment pipelines and cross-origin CORS configuration. For this scope, the simplicity tradeoff is clear.
 
-### Tasks
-- `GET /api/projects/:id/tasks` — List tasks
-- `POST /api/projects/:id/tasks` — Create task (Admin)
-- `PUT /api/projects/:id/tasks/:taskId` — Update task (Admin)
-- `PATCH /api/projects/:id/tasks/:taskId/status` — Update status (Assignee/Admin)
-- `DELETE /api/projects/:id/tasks/:taskId` — Delete task (Admin)
+**Vanilla CSS over Tailwind or a component library**
+Full, explicit control over the design system with no abstraction overhead. Every style decision is intentional and traceable.
 
-### Dashboard
-- `GET /api/dashboard/stats` — Aggregated stats
+**Zod for validation**
+Schemas are defined once and enforced consistently at the API boundary. Validation errors are structured and easy to surface to the client without extra mapping logic.
 
-## Deployment (Railway)
+**React Context over Redux**
+The application's state surface — primarily auth state and per-page data fetched from the API — does not justify the boilerplate cost of Redux. Context with `useReducer` is sufficient and keeps the codebase lean.
 
-1. Push to GitHub
-2. Create a new Railway project
-3. Add a PostgreSQL database service
-4. Connect your GitHub repo
-5. Set environment variables:
-   - `DATABASE_URL` — auto-linked from Railway PostgreSQL
-   - `JWT_SECRET` — generate a strong random string
-   - `NODE_ENV` — `production`
-6. Railway will run `npm run build` then `npm start` automatically
+---
 
 ## License
 
