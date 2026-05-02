@@ -1,4 +1,4 @@
-# Jeera — Team Task Manager
+# Jeera - Team Task Manager
 
 A full-stack collaborative task management application built as a simplified Trello/Asana clone. Designed to demonstrate end-to-end product thinking, clean architecture, and production-ready engineering practices.
 
@@ -30,7 +30,7 @@ A full-stack collaborative task management application built as a simplified Tre
 
 Jeera is a multi-user project and task management tool where teams can collaborate, assign work, and track delivery. It is built as a monorepo with a React frontend and an Express.js REST API backend, backed by PostgreSQL.
 
-The application supports complete project lifecycle management — from creating a project and onboarding team members, to assigning tasks with priority levels, tracking status across a Kanban board, and reviewing team-wide progress on a central dashboard.
+The application supports complete project lifecycle management - from creating a project and onboarding team members, to assigning tasks with priority levels, tracking status across a Kanban board, and reviewing team-wide progress on a central dashboard.
 
 ---
 
@@ -49,7 +49,7 @@ The application supports complete project lifecycle management — from creating
 **Tasks**
 - Create tasks with title, description, priority, due date, and assignee
 - Kanban board view with three columns: To Do, In Progress, Done
-- Role-restricted actions — only Admins can create or delete tasks; Members can update status on tasks assigned to them
+- Role-restricted actions - only Admins can create or delete tasks; Members can update status on tasks assigned to them
 - Filterable task list per project
 
 **Dashboard**
@@ -82,7 +82,7 @@ The application supports complete project lifecycle management — from creating
 
 ## Architecture
 
-The application is structured as a monorepo with two packages — `client` and `server`. In production, the React app is compiled into static files and served directly by Express, resulting in a single deployable service with no CORS complexity.
+The application is structured as a monorepo with two packages - `client` and `server`. In production, the React app is compiled into static files and served directly by Express, resulting in a single deployable service with no CORS complexity.
 
 ```
 Browser → Express Server (Railway) → PostgreSQL (Neon.tech)
@@ -97,9 +97,9 @@ All API routes are prefixed with `/api`. Any non-API path falls through to `inde
 
 ## API Design
 
-The REST API is organized around three core resources — `auth`, `projects`, `tasks` — and a `dashboard` module for aggregated reads.
+The REST API is organized around three core resources - `auth`, `projects`, `tasks` - and a `dashboard` module for aggregated reads.
 
-**Auth** — `/api/auth`
+**Auth** - `/api/auth`
 
 | Method | Endpoint | Description         | Auth Required |
 |--------|----------|---------------------|---------------|
@@ -107,19 +107,19 @@ The REST API is organized around three core resources — `auth`, `projects`, `t
 | POST   | /login   | Login, returns JWT  | No            |
 | GET    | /me      | Get current user    | Yes           |
 
-**Projects** — `/api/projects`
+**Projects** - `/api/projects`
 
 | Method | Endpoint                     | Description       | Role Required |
 |--------|------------------------------|-------------------|---------------|
 | GET    | /                            | List user's projects | Member+    |
-| POST   | /                            | Create project    | —             |
+| POST   | /                            | Create project    | -             |
 | GET    | /:projectId                  | Project details   | Member+       |
 | PUT    | /:projectId                  | Update project    | Admin         |
 | DELETE | /:projectId                  | Delete project    | Admin         |
 | POST   | /:projectId/members          | Add member        | Admin         |
 | DELETE | /:projectId/members/:userId  | Remove member     | Admin         |
 
-**Tasks** — `/api/projects/:projectId/tasks`
+**Tasks** - `/api/projects/:projectId/tasks`
 
 | Method | Endpoint          | Description              | Role Required    |
 |--------|-------------------|--------------------------|------------------|
@@ -130,7 +130,7 @@ The REST API is organized around three core resources — `auth`, `projects`, `t
 | PATCH  | /:taskId/status   | Update status only       | Assignee / Admin |
 | DELETE | /:taskId          | Delete task              | Admin            |
 
-**Dashboard** — `/api/dashboard`
+**Dashboard** - `/api/dashboard`
 
 | Method | Endpoint          | Description                   |
 |--------|-------------------|-------------------------------|
@@ -141,11 +141,11 @@ The REST API is organized around three core resources — `auth`, `projects`, `t
 
 ## Authentication & Security
 
-- Passwords are hashed with `bcryptjs` before storage — plaintext is never persisted
+- Passwords are hashed with `bcryptjs` before storage - plaintext is never persisted
 - JWTs are signed with a server-side secret and carry a 24-hour expiry
 - All protected routes require an `Authorization: Bearer <token>` header
 - A dedicated `auth` middleware verifies and decodes the token before the request reaches any controller
-- All request bodies are validated against Zod schemas at the API boundary — malformed or missing fields are rejected before reaching business logic
+- All request bodies are validated against Zod schemas at the API boundary - malformed or missing fields are rejected before reaching business logic
 
 ---
 
@@ -153,8 +153,8 @@ The REST API is organized around three core resources — `auth`, `projects`, `t
 
 Every project has members with one of two roles: `ADMIN` or `MEMBER`. Access is enforced at the middleware level, not inside controllers.
 
-- **ADMIN** — full CRUD on the project, its members, and all tasks
-- **MEMBER** — read access to the project and tasks; can only update the status of tasks assigned to them
+- **ADMIN** - full CRUD on the project, its members, and all tasks
+- **MEMBER** - read access to the project and tasks; can only update the status of tasks assigned to them
 
 The RBAC middleware queries the `ProjectMember` table on each request to confirm the authenticated user's role before allowing the operation to proceed. Role checks are not duplicated in business logic.
 
@@ -164,21 +164,21 @@ The RBAC middleware queries the `ProjectMember` table on each request to confirm
 
 PostgreSQL is hosted on [Neon.tech](https://neon.tech) and managed via Prisma migrations. The schema is built around four models:
 
-- **User** — stores credentials and profile; identified by UUID
-- **Project** — a workspace with name and description
-- **ProjectMember** — junction table linking users to projects with a role (`ADMIN` | `MEMBER`)
-- **Task** — belongs to a project; has status (`TODO` | `IN_PROGRESS` | `DONE`), priority (`LOW` | `MEDIUM` | `HIGH` | `URGENT`), due date, and separate `creatorId` and `assigneeId` foreign keys
+- **User** - stores credentials and profile; identified by UUID
+- **Project** - a workspace with name and description
+- **ProjectMember** - junction table linking users to projects with a role (`ADMIN` | `MEMBER`)
+- **Task** - belongs to a project; has status (`TODO` | `IN_PROGRESS` | `DONE`), priority (`LOW` | `MEDIUM` | `HIGH` | `URGENT`), due date, and separate `creatorId` and `assigneeId` foreign keys
 
 Key decisions:
 - UUIDs as primary keys to avoid enumeration attacks and improve portability
 - Enums enforced at the database level for data integrity
-- Separate `creatorId` and `assigneeId` on tasks — supports audit trail and enables fine-grained RBAC
+- Separate `creatorId` and `assigneeId` on tasks - supports audit trail and enables fine-grained RBAC
 
 ---
 
 ## UI/UX Approach
 
-The interface uses a flat, minimalist, card-based dashboard layout. All components are custom-built — no third-party UI library is used.
+The interface uses a flat, minimalist, card-based dashboard layout. All components are custom-built - no third-party UI library is used.
 
 - A CSS design token system handles color, spacing, and typography across the entire app
 - Inter is used for body text; JetBrains Mono for IDs and code-like elements
@@ -195,7 +195,7 @@ jeera/
 │   └── src/
 │       ├── api/                # Axios instance + per-resource service modules
 │       ├── components/         # Shared UI components (Button, Modal, Badge, Card, etc.)
-│       ├── context/            # AuthContext — global auth state
+│       ├── context/            # AuthContext - global auth state
 │       ├── hooks/              # Custom hooks (useAuth, etc.)
 │       ├── pages/              # Route-level views (Login, Dashboard, ProjectDetail, etc.)
 │       └── utils/              # Date formatting and other helpers
@@ -205,7 +205,7 @@ jeera/
 │   └── src/
 │       ├── config/             # Environment variable loader
 │       ├── middleware/         # auth, rbac, validate, errorHandler
-│       ├── modules/            # Feature modules — each has routes, controller, service, schema
+│       ├── modules/            # Feature modules - each has routes, controller, service, schema
 │       │   ├── auth/
 │       │   ├── projects/
 │       │   ├── tasks/
@@ -216,7 +216,7 @@ jeera/
 └── README.md
 ```
 
-The backend follows a **modular layered pattern** — each feature is self-contained with its own routes, controller, service, and Zod schema. Controllers handle HTTP request/response concerns only. Business logic lives in service files. Prisma queries are isolated to the service layer.
+The backend follows a **modular layered pattern** - each feature is self-contained with its own routes, controller, service, and Zod schema. Controllers handle HTTP request/response concerns only. Business logic lives in service files. Prisma queries are isolated to the service layer.
 
 ---
 
@@ -244,10 +244,10 @@ cp .env.example .env
 npx prisma migrate dev
 
 # 6. Start both dev servers (in separate terminals)
-# Terminal 1 — backend
+# Terminal 1 - backend
 cd server && npm run dev
 
-# Terminal 2 — frontend
+# Terminal 2 - frontend
 cd client && npm run dev
 ```
 
@@ -260,10 +260,10 @@ The Vite dev server proxies `/api` requests to the Express backend, so no CORS c
 | Variable       | Description                                                        |
 |----------------|--------------------------------------------------------------------|
 | `DATABASE_URL` | PostgreSQL connection string (Neon.tech or local)                  |
-| `JWT_SECRET`   | Secret used to sign and verify JWTs — use a long random string     |
+| `JWT_SECRET`   | Secret used to sign and verify JWTs - use a long random string     |
 | `NODE_ENV`     | `development` or `production`                                      |
 | `PORT`         | Port for Express (Railway injects this automatically in production)|
-| `VITE_API_URL` | API base URL — set to `/api` when frontend and backend share origin|
+| `VITE_API_URL` | API base URL - set to `/api` when frontend and backend share origin|
 
 ---
 
@@ -285,7 +285,7 @@ This single-service setup eliminates the need for a separate static hosting serv
 ## Engineering Decisions
 
 **PostgreSQL over MongoDB**
-The data model is inherently relational — users belong to projects through a membership table, and tasks reference both. SQL joins and foreign key constraints handle this more cleanly and safely than a document model would.
+The data model is inherently relational - users belong to projects through a membership table, and tasks reference both. SQL joins and foreign key constraints handle this more cleanly and safely than a document model would.
 
 **Single Railway service**
 Serving the React build from Express avoids managing two deployment pipelines and cross-origin CORS configuration. For this scope, the simplicity tradeoff is clear.
@@ -297,7 +297,7 @@ Full, explicit control over the design system with no abstraction overhead. Ever
 Schemas are defined once and enforced consistently at the API boundary. Validation errors are structured and easy to surface to the client without extra mapping logic.
 
 **React Context over Redux**
-The application's state surface — primarily auth state and per-page data fetched from the API — does not justify the boilerplate cost of Redux. Context with `useReducer` is sufficient and keeps the codebase lean.
+The application's state surface - primarily auth state and per-page data fetched from the API - does not justify the boilerplate cost of Redux. Context with `useReducer` is sufficient and keeps the codebase lean.
 
 ---
 
