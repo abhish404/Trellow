@@ -1,4 +1,4 @@
-# Jeera - Team Task Manager
+# Trellow - Team Task Manager
 
 A full-stack collaborative task management application built as a simplified Trello/Asana clone. Designed to demonstrate end-to-end product thinking, clean architecture, and production-ready engineering practices.
 
