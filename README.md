@@ -300,7 +300,3 @@ Schemas are defined once and enforced consistently at the API boundary. Validati
 The application's state surface - primarily auth state and per-page data fetched from the API - does not justify the boilerplate cost of Redux. Context with `useReducer` is sufficient and keeps the codebase lean.
 
 ---
-
-## License
-
-MIT
